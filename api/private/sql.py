@@ -1,9 +1,10 @@
 #!/usr/bin/python
 
 import mysql.connector as mysql
+import private.constants as constants
 
 class SQL:
-	def __init__(self, host, user, db):
+	def __init__(self, host=constants.sql_host, user=constants.sql_user, db=constants.sql_db):
 		self._connection = mysql.connect(host=host, user=user, database=db)
 		self._cursor = self._connection.cursor()
 	def __del__(self):
@@ -19,7 +20,7 @@ class SQL:
 	def run_stored_proc_for_single_item(self, stored_proc, *args):
 		try:
 			return self.run_stored_proc_for_multiple_items(stored_proc, *args)[0]
-		except TypeError:
+		except IndexError:
 			return None
 
 	# just do something

@@ -1,0 +1,7 @@
+USE RoomDrawTesting
+DELIMITER //
+CREATE OR REPLACE PROCEDURE GetStudent(IN sid INT)
+BEGIN
+	SELECT * FROM Students WHERE student_id = sid;
+END//
+DELIMITER ;
