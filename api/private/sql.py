@@ -4,8 +4,8 @@ import mysql.connector as mysql
 import private.constants as constants
 
 class SQL:
-	def __init__(self, host=constants.sql_host, user=constants.sql_user, db=constants.sql_db):
-		self._connection = mysql.connect(host=host, user=user, database=db)
+	def __init__(self, host=constants.sql_host, user=constants.sql_user, password=constants.sql_password, db=constants.sql_db):
+		self._connection = mysql.connect(host=host, user=user, password=password, database=db)
 		self._cursor = self._connection.cursor()
 	def __del__(self):
 		self._connection.disconnect()
