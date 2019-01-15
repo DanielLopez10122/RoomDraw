@@ -1,8 +1,8 @@
-CREATE DATABASE RoomDrawTesting;
+CREATE DATABASE IF NOT EXISTS RoomDrawTesting;
 
 USE RoomDrawTesting;
 
-CREATE TABLE Students(
+CREATE TABLE IF NOT EXISTS Students(
 
 	student_id INT NOT NULL,
 	first_name VARCHAR(64) NOT NULL,
@@ -16,7 +16,7 @@ CREATE TABLE Students(
 	PRIMARY KEY(student_id)
 );
 
-CREATE TABLE Groups(
+CREATE TABLE IF NOT EXISTS Groups(
 	group_id INT NOT NULL,
 	radom_number INT NOT NULL,
 	grade_level INT NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE Groups(
 	PRIMARY KEY(group_id)
 );
 
-CREATE TABLE Dorms(
+CREATE TABLE IF NOT EXISTS Dorms(
 	dorm_id INT NOT NULL,
 	dorm_code VARCHAR(3) NOT NULL,
 	dorm_name VARCHAR(64) NOT NULL,
@@ -34,7 +34,7 @@ CREATE TABLE Dorms(
 	PRIMARY KEY(dorm_id)
 );
 
-CREATE TABLE Rooms(
+CREATE TABLE IF NOT EXISTS Rooms(
 	room_id INT NOT NULL,
 	dorm_id INT NOT NULL,
 	capacity INT NOT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE Rooms(
 	PRIMARY KEY(room_id)
 );
 
-CREATE TABLE GroupWishlists(
+CREATE TABLE IF NOT EXISTS GroupWishlists(
 	group_id INT NOT NULL,
 	rank INT NOT NULL,
 	dorm_id INT NOT NULL,
@@ -53,7 +53,7 @@ CREATE TABLE GroupWishlists(
 	floor INT
 );
 
-CREATE TABLE StudentWishlists(
+CREATE TABLE IF NOT EXISTS StudentWishlists(
 	student_id INT NOT NULL,
 	rank INT NOT NULL,
 	dorm_id INT NOT NULL,
@@ -62,4 +62,4 @@ CREATE TABLE StudentWishlists(
 );
 
 
-CREATE DATABASE RoomDraw2018;
+CREATE DATABASE IF NOT EXISTS RoomDraw2018;
