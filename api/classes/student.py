@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-class Student:
+class Student(dict):
 	def __init__(self, info):
 		self.info = {}
 		self.info["student_id"]    = info[0]
@@ -11,3 +11,4 @@ class Student:
 		self.info["sex"]           = info[5]
 		self.info["group_id"]      = info[6]
 		self.info["roommate_id"]   = info[7]
+		dict.__init__(self, self.info)

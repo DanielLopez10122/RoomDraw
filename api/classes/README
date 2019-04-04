@@ -1,0 +1,3 @@
+These classes should be super simple and should only be temporary.  The classes
+should inherit `dict` and contain all the necessary fields.  This makes it easy to
+send information through falcon's `response.media`.

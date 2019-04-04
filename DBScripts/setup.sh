@@ -7,5 +7,5 @@ if [ -z "$USER" ]; then
 	USER="root"
 fi
 
-cat *.sql | mysql -u root -p
-
+rm generated.sql
+cat *.sql procs/*.sql | tee generated.sql | mysql -u $USER -p

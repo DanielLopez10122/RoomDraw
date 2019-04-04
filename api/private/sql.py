@@ -30,3 +30,15 @@ class SQL:
 		# flush the results
 		for result in self._cursor.stored_results():
 			result.fetchall()
+
+	# commit the results to the database
+	def commit(self):
+		self._connection.commit()
+
+def sql_init(host=constants.sql_host, user=constants.sql_user,
+		password=constants.sql_password, db=constants.sql_db):
+	global s
+	s = SQL()
+
+def sql_run_stored_proc(stored_proc, *args):
+	s.run_stored_proc(stored_proc, *args)
