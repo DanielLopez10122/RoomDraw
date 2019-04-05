@@ -34,8 +34,10 @@ api.add_route("/dorms", dorms.Dorm())
 api.add_route("/rooms", rooms.Room())
 
 # for testing
-session.create_session(2, "alex")
+session.create_session(0, "alex")
 session.create_session(1, "denton")
+session.create_session(2, "eli")
+session.create_session(3, "michael")
 
 try:
 	bjoern.run(api, 'localhost', 8000)
