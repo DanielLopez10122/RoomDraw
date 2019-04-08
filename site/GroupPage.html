@@ -3,92 +3,131 @@
 Denton Lunsford
 GroupPage.html v.1 
 v.2 notes by Eli Pruneda:
-    Removed cheesy line from headers, changed language in Add New Student button, sepparated html and css files.-->
+    Removed cheesy line from headers, changed language in Add New Student button, sepparated html and css files.
+v.3 4/5/19 add receive, send, accept or decline invite group functionality -->
 <!Doctype html>
 <html>
+
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="GroupPage.css">
+  <title>Group Management</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="GroupPage.css">
 </head>
 <!-- Title -->
+
 <body>
-<div class= "content">
-        <h1>Housing Group - insert basic instructions</h1>
-        <div class="btn-group">
-            <button>Add New Group Member</button>
-          </div>
-<!-- Group Information -->
-<table style="width:100%">
+  <div class="topnav">
+    <!--Top Navigation-->
+    <a href="RoomDrawHome.html">Home</a>
+    <a href="GroupPage.html">Housing Group Management</a>
+    <a href="HWLMgmt M.html">Housing Wish List Management</a>
+    <a href="LiveDraw M0.2.html">Live Draw</a>
+    <a href="#">Documents Page</a>
+    <a href="#">FAQs</a>
+    <a href="#">Log Out</a>
+  </div>
+  <h1>Housing Group - insert basic instructions</h1>
+  <div class="side buttons">
+    <button class="open-button" onclick="openForm()">Add New Member</button>
+    <div class="form-popup" id="myForm">
+      <form action="/action_page.php" class="form-container">
+        <h1>Add New Member</h1>
+
+        <label for="email"><b>Enter Student's ID</b></label>
+        <input type="text" placeholder="Enter ID" name="id" required>
+
+         <!-- <label for="psw"><b>Password</b></label> -->
+              <!-- <input type="password" placeholder="Enter Password" name="psw" required> -->
+          
+              <button type="submit" class="btn">Submit</button>
+        <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+      </form>
+    </div>
+  </div>
+  <!-- Group Information -->
+  <div class="content">
+  <table style="width:80%">
     <tr>
       <th>Name</th>
       <th>Class Code</th>
-      <th>Random Number</th> 
+      <th>Random Number</th>
       <th>Student ID</th>
       <th>Rommate Name</th>
     </tr>
     <tr>
-      <td>John Doe</td>
-      <td>Junior</td>
-      <td>123456789</td> 
-      <td>987654321</td>
-      <td>Jack Jenkins</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
     </tr>
     <tr>
-        <td>Joseph Jackson</td>
-        <td>Sophomore</td> 
-        <td>543216789</td>
-        <td>678954321</td>
-        <td>Jared Johnson</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
     </tr>
     <tr>
-        <td>Jack Jenkins</td>
-        <td>Junior</td> 
-        <td>876543219</td>
-        <td>912345678</td>
-        <td>John Doe</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
     </tr>
     <tr>
-        <td>Jared Johnson</td>
-        <td>Sophomore</td> 
-        <td>654321987</td>
-        <td>789123456</td>
-        <td>Joseph Jackson</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
     </tr>
     <tr>
-        <td></td>
-        <td></td> 
-        <td></td>
-        <td></td>
-        <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
     </tr>
     <tr>
-        <td></td>
-        <td></td> 
-        <td></td>
-        <td></td>
-        <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
     </tr>
     <tr>
-        <td></td>
-        <td></td> 
-        <td></td>
-        <td></td>
-        <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
     </tr>
     <tr>
-        <td></td>
-        <td></td> 
-        <td></td>
-        <td></td>
-        <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
     </tr>
   </table>
+</div>
   <div class="btn-group">
     <button>Save</button>
   </div>
   <div class="btn-group2">
     <button>Leave Group</button>
   </div>
-</div>
+  </div>
+  <script>
+    function openForm() {
+      document.getElementById("myForm").style.display = "block";
+    }
+
+    function closeForm() {
+      document.getElementById("myForm").style.display = "none";
+    }
+  </script>
 </body>
+
 </html>
