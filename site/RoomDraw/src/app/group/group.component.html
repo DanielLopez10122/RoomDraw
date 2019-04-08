@@ -45,8 +45,8 @@
 					<td>{{group.grade_level}}</td>
 					<td>{{group.random_number}}</td>
 					<td>{{group.leader}}</td>
-					<td> <button (click)="leaveGroup()">Accept Invitation</button> </td>
-					<td> <button (click)="leaveGroup()">Decline Invitation</button> </td>
+					<td> <button (click)="acceptGroupInvite(group.group_id)">Accept Invitation</button> </td>
+					<td> <button (click)="declineGroupInvite(group.group_id)">Decline Invitation</button> </td>
 				</tr>
 			</table>
 		</div>

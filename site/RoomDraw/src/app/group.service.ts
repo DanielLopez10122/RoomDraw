@@ -22,6 +22,11 @@ export class GroupService {
 		private studentService: StudentService
 	) { }
 
+	getGroupsAhead(): Observable<number> {
+		var url = "http://localhost:8000/group/rank";
+		return this.http.get<number>(url, this.httpOptions);
+	}
+
 	getGroupMembers(): Observable<Student[]> {
 		var url = "http://localhost:8000/group/members";
 
@@ -61,7 +66,7 @@ export class GroupService {
 	}
 
 	declineInvite(group_id): Observable<Object> {
-		var url = "http://localhost:8000/group/invite?group_id=${group_id}";
+		var url = "http://localhost:8000/group/invite?group_id=" + group_id;
 
 		return this.http.delete<Object>(url, this.httpOptions);
 	}

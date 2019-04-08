@@ -1,5 +1,6 @@
 import { Student } from '../Student';
 import { StudentService } from '../student.service';
+import { GroupService } from '../group.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -9,8 +10,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 	myInfo: Student;
+	rank: number;
 	constructor(
-		private studentService: StudentService
+		private studentService: StudentService,
+		private groupService: GroupService
 	) { }
 
 	ngOnInit() {
@@ -24,5 +27,13 @@ export class HomeComponent implements OnInit {
 		} else {
 			this.myInfo = this.studentService.myInfo;
 		}
+
+		this.groupService.getGroupsAhead().
+			subscribe(rank => this.rank = rank);
+	}
+
+	getRank(): void {
+		this.groupService.getGroupsAhead()
+			.subscribe(rank => this.rank = rank);
 	}
 }

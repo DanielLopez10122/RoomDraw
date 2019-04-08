@@ -47,11 +47,11 @@ export class GroupComponent implements OnInit {
 			return;
 		}
 
-		this.idx = 0;
+		GroupComponent.idx = 0;
 		for (var i = 0; i < invitations.length; i++) {
 			var id = invitations[i].group_id;
 			this.studentService.getStudentInfo(id).
-				subscribe(info => invitations[this.idx++].leader = info.first_name + ' ' + info.last_name)
+				subscribe(info => invitations[GroupComponent.idx++].leader = info.first_name + ' ' + info.last_name)
 		}
 	}
 
@@ -77,11 +77,11 @@ export class GroupComponent implements OnInit {
 
 	acceptGroupInvite(group_id): void {
 		this.groupService.acceptInvite(group_id)
-			.subscribe();
+			.subscribe(() => location.reload());
 	}
 
 	declineGroupInvite(group_id): void {
 		this.groupService.declineInvite(group_id)
-			.subscribe();
+			.subscribe(() => location.reload());
 	}
 }
