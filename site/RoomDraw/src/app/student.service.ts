@@ -28,7 +28,7 @@ export class StudentService {
 	}
 
 	getStudentInfo(student_id): Observable<Student> {
-		var url = "http://localhost:8000/student?id=${student_id}";
+		var url = 'http://localhost:8000/student?id=' + student_id;
 		return this.http.get<Student>(url, this.httpOptions);
 	}
 }

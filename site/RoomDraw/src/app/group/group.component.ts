@@ -1,5 +1,6 @@
 import { Student } from '../Student';
 import { Invitations } from '../Invitations';
+import { StudentService } from '../student.service';
 import { GroupService } from '../group.service';
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
@@ -13,11 +14,15 @@ export class GroupComponent implements OnInit {
 
 	constructor(
 		private groupService: GroupService,
+		private studentService: StudentService,
 		private location: Location
 	) { }
 
 	members: Student[];
 	invites: Invitations[];
+
+	static idx = 0;
+
 	ngOnInit() {
 		this.getGroupMembers();
 		this.getGroupInvites();
@@ -37,12 +42,31 @@ export class GroupComponent implements OnInit {
 			subscribe(() => location.reload())
 	}
 
+	private _populateInviteLeaders(invitations: Invitations[]): void {
+		if (invitations == null) {
+			return;
+		}
+
+		this.idx = 0;
+		for (var i = 0; i < invitations.length; i++) {
+			var id = invitations[i].group_id;
+			this.studentService.getStudentInfo(id).
+				subscribe(info => invitations[this.idx++].leader = info.first_name + ' ' + info.last_name)
+		}
+	}
+
+	private _populateInvitations(invitations: Invitations[]) {
+		this._populateInviteLeaders(invitations);
+		this.invites = invitations;
+	}
+
 	getGroupInvites(): void {
 		if (this.groupService.invites == null) {
 			this.groupService.getInvites()
-				.subscribe(invitations => this.invites = invitations);
+				.subscribe(invitations => this._populateInvitations(invitations));
 		} else {
-			this.invites = this.groupService.invites;
+			console.log("Populating null");
+			this._populateInvitations(this.groupService.invites);
 		}
 	}
 
