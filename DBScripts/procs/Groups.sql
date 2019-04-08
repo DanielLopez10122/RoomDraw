@@ -29,21 +29,30 @@ END//
 CREATE OR REPLACE PROCEDURE LeaveGroup(IN sid INT)
 BEGIN
 	SET @old_gid = (SELECT group_id FROM Students WHERE student_id = sid);
+	SET @new_gid = @old_gid;
 
-	UPDATE Students
-	SET group_id = sid
-	WHERE student_id = sid;
+	-- IF not group leader
+	IF sid <> @old_gid THEN
+		UPDATE Students
+		SET group_id = sid
+		WHERE student_id = sid;
 
-	SET @new_gid = (SELECT student_id FROM Students WHERE group_id = @old_gid AND student_id <> sid LIMIT 1);
+	ELSE -- IF it is the group leader
+		SET @new_gid = (SELECT student_id FROM Students WHERE group_id = @old_gid AND student_id <> sid LIMIT 1);
+
+		UPDATE Students
+		SET group_id = @new_gid
+		WHERE group_id = @old_gid AND student_id <> sid;
+
+		SET @rand = (SELECT random_number FROM Students WHERE student_id = sid);
+
+		UPDATE Groups
+		SET random_number = @rand
+		WHERE group_id = sid;
+	END IF;
+
 	-- SET @grade   = (SELECT grade_level FROM Students WHERE group_id = @old_gid);
 
-	UPDATE Groups
-	SET group_id = @new_gid
-	WHERE group_id = @old_gid;
-
-	UPDATE Students
-	SET group_id = @new_gid
-	WHERE group_id = @old_gid AND student_id <> sid;
 
 	SET @rand    = (SELECT random_number FROM Students WHERE group_id = @new_gid ORDER BY random_number LIMIT 1);
 
@@ -55,27 +64,39 @@ END//
 CREATE OR REPLACE PROCEDURE InviteToGroup(IN sid INT, IN gid INT)
 BEGIN
 	INSERT INTO GroupInvites
-	(student_id, group_id) VALUES (sid, gid);
+	(student_id, group_id) VALUES (sid, gid)
+	ON DUPLICATE KEY UPDATE student_id = sid;
 END//
 
 CREATE OR REPLACE PROCEDURE GetInvitations(IN sid INT)
 BEGIN
-	SELECT group_id FROM GroupInvites
+	SELECT
+	i.group_id,
+	g.random_number,
+	g.grade_level
+
+	FROM GroupInvites i JOIN Groups g
+	ON i.group_id = g.group_id
+
 	WHERE student_id = sid;
 END//
 
 CREATE OR REPLACE PROCEDURE AcceptInvitation(IN sid INT, IN gid INT)
 BEGIN
-	DELETE FROM GroupInvites
-	WHERE student_id = sid;
+	SET @count = (SELECT COUNT(*) FROM GroupInvites WHERE student_id = sid AND group_id = gid);
 
-	UPDATE Students
-	SET group_id = gid
-	WHERE student_id = sid;
+	IF @count <> 0 THEN
+		DELETE FROM GroupInvites
+		WHERE student_id = sid;
 
-	SET @rand = (SELECT random_number FROM Students WHERE group_id = gid ORDER BY random_number LIMIT 1);
+		UPDATE Students
+		SET group_id = gid
+		WHERE student_id = sid;
 
-	UPDATE Groups SET random_number = @new_rand WHERE group_id = gid;
+		SET @rand = (SELECT random_number FROM Students WHERE group_id = gid ORDER BY random_number LIMIT 1);
+
+		UPDATE Groups SET random_number = @rand WHERE group_id = gid;
+	END IF;
 END//
 
 CREATE OR REPLACE PROCEDURE DeclineInvitation(IN sid INT, IN gid INT)

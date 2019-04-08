@@ -1,5 +1,6 @@
 #!/bin/sh
 
 . ./common.sh
-DELETE "/group" $@
+
+GET /group/invite $@
 echo

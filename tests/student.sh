@@ -1,5 +1,6 @@
 #!/bin/sh
 
 . ./common.sh
-DELETE "/group" $@
+
+GET /student?id=2 $@
 echo
