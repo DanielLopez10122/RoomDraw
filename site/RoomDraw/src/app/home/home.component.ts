@@ -1,5 +1,5 @@
-import { Student } from '../Student'
-import { StudentService } from '../student.service'
+import { Student } from '../Student';
+import { StudentService } from '../student.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -9,14 +9,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 	myInfo: Student;
-	constructor(private studentService: StudentService) { }
+	constructor(
+		private studentService: StudentService
+	) { }
 
 	ngOnInit() {
 		this.getMyInfo();
 	}
 
 	getMyInfo(): void {
-		this.studentService.getInfo()
-			.subscribe(myInfo => this.myInfo = myInfo);
+		if (this.studentService.myInfo == null) {
+			this.studentService.getInfo()
+				.subscribe(myInfo => this.myInfo = myInfo);
+		} else {
+			this.myInfo = this.studentService.myInfo;
+		}
 	}
 }

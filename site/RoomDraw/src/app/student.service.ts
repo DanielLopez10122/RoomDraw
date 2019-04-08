@@ -8,18 +8,27 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class StudentService {
 
+	public myInfo: Student;
+
 	httpOptions = {
 		headers: new HttpHeaders({
 			'SESSION-ID': 'alex'
 		})
 	}
-	url = "http://localhost:8000/myinfo";
 
 	constructor(
 		private http: HttpClient
 	) { }
 
 	getInfo(): Observable<Student> {
-		return this.http.get<Student>(this.url, this.httpOptions);
+		var url = "http://localhost:8000/myinfo";
+		var obs = this.http.get<Student>(url, this.httpOptions);
+		obs.subscribe(myInfo => this.myInfo = myInfo);
+		return obs;
+	}
+
+	getStudentInfo(student_id): Observable<Student> {
+		var url = "http://localhost:8000/student?id=${student_id}";
+		return this.http.get<Student>(url, this.httpOptions);
 	}
 }
