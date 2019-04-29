@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import json
 import private.sql as sql
 import private.constants as constants
 import private.stored_procs as procs
@@ -31,7 +32,6 @@ class Group:
 			response.media = "{}"
 	
 	def on_delete(self, request, response):
-		# TODO add stored proc for leaving the group
 		session_token = get_session(request)
 		if not authenticated(session_token):
 			response.media = "Not authenticated"
@@ -64,7 +64,6 @@ class GroupMembers:
 				group_list.append(student.Student(person))
 			response.media = group_list
 
-# TODO do this!
 class GroupInvite:
 	def on_get(self, request, response):
 		session_token = get_session(request)
@@ -72,17 +71,70 @@ class GroupInvite:
 			response.media = "Not authenticated"
 			return
 
-		ID = session.id_from_session(session_token)
-		results = connection.run_stored_proc_for_multiple_items(procs.get_group_members, gid)
+		sid = session.id_from_session(session_token)
 
-		invitations = []
+		connection = sql.SQL()
+		results = connection.run_stored_proc_for_multiple_items(procs.get_group_invites, sid)
+
+		d = []
 		if results:
 			for inv in results:
-				invitations.append(Groups.Invitations(inv))
-			response.media = invitations
+				d.append(classes.group.Invitations(inv))
+			response.media = d
 	# Invite a student
+	# TODO prevent student from inviting another to a different group
+	def on_post(self, request, response):
+		session_token = get_session(request)
+		if not authenticated(session_token):
+			response.media = "Not authenticated"
+			return
+		params = json.loads(request.stream.read())
+		ID = session.id_from_session(session_token)
+		stud = get_student_by_id(ID)
+
+		sid = get_val(params, "student_id")
+		gid = stud["group_id"]
+
+		if sid is None or gid is None:
+			response.media = "Missing parameters"
+			return
+
+		connection = sql.SQL()
+		connection.run_stored_proc(procs.invite_to_group, sid, gid)
+		connection.commit()
+
+	# Accept an invite
 	def on_put(self, request, response):
 		session_token = get_session(request)
 		if not authenticated(session_token):
 			response.media = "Not authenticated"
 			return
+		params = json.loads(request.stream.read())
+		ID = session.id_from_session(session_token)
+		gid = get_val(params, "group_id")
+
+		if gid is None:
+			response.media = "Need a group to accept"
+			return
+		
+		connection = sql.SQL()
+		connection.run_stored_proc(procs.accept_group_invite, sid, gid)
+		connection.commit()
+
+	# Decline an invite
+	def on_delete(self, request, response):
+		session_token = get_session(request)
+		if not authenticated(session_token):
+			response.media = "Not authenticated"
+			return
+
+		sid = session.id_from_session(session_token)
+		gid = get_val(request.params, "group_id")
+
+		if gid is None:
+			response.media = "Please provide a group id to decline"
+			return
+
+		connection = sql.SQL()
+		connection.run_stored_proc(procs.decline_group_invite, sid, gid)
+		connection.commit()

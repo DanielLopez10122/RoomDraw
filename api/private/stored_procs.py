@@ -16,3 +16,8 @@ put_group_wishlist = "AddGroupWishlist"
 get_student_wishlist = "GetStudentWishlist"
 delete_student_wishlist = "DeleteStudentWishlist"
 put_student_wishlist = "AddStudentWishlist"
+
+get_group_invites = "GetInvitations"
+invite_to_group = "InviteToGroup"
+accept_group_invite = "AcceptInvitation"
+decline_group_invite = "DeclineInvitation"

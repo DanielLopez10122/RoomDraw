@@ -1,0 +1,53 @@
+<!-- Room Draw Project
+	12/1/2018
+	Denton Lunsford
+	GroupPage.html v.1
+	v.2 notes by Eli Pruneda:
+	Removed cheesy line from headers, changed language in Add New Student button, sepparated html and css files.-->
+	<!Doctype html>
+	<app-nav-bar></app-nav-bar>
+	<div class= "content">
+		<h1>Housing Group - insert basic instructions</h1>
+		<div class="btn-group">
+			<button>Add New Group Member</button>
+		</div>
+		<!-- Group Information -->
+		<table style="width:100%">
+			<tr>
+				<th>Name</th>
+				<th>Class Code</th>
+				<th>Random Number</th>
+				<th>Student ID</th>
+			</tr>
+			<tr *ngFor="let student of members">
+				<td>{{student.first_name + ' ' + student.last_name}}</td>
+				<td>{{student.grade_level}}</td>
+				<td>{{student.random_number}}</td>
+				<td>{{student.student_id}}</td>
+			</tr>
+		</table>
+		<div class="btn-group2">
+			<button (click)="leaveGroup()">Leave Group</button>
+		</div>
+
+		<!-- Invite Information -->
+		<div *ngIf="invites != null">
+			<h1>Invitations</h1>
+			<table style="width:100%">
+				<tr>
+					<th>Group ID</th>
+					<th>Class Code</th>
+					<th>Random Number</th>
+					<th>Group Leader</th>
+				</tr>
+				<tr *ngFor="let group of invites">
+					<td>{{group.group_id}}</td>
+					<td>{{group.grade_level}}</td>
+					<td>{{group.random_number}}</td>
+					<td>{{group.leader}}</td>
+					<td> <button (click)="acceptGroupInvite(group.group_id)">Accept Invitation</button> </td>
+					<td> <button (click)="declineGroupInvite(group.group_id)">Decline Invitation</button> </td>
+				</tr>
+			</table>
+		</div>
+	</div>

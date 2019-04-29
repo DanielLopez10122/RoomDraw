@@ -16,16 +16,10 @@ class Room:
 			response.media = "Not authenticated"
 			return
 
-		k_dorm            = "dorm"
-		k_number          = "number"
-		k_capacity        = "capacity"
-		k_available_spots = "spots_left"
-		k_floor           = "floor"
-
-		room_number = get_val(request.params, k_number)
-		spots_left = get_val(request.params, k_available_spots)
-		floor = get_val(request.params, k_floor)
-		dorm = get_val(request.params, k_dorm)
+		room_number = get_val(request.params, "number")
+		spots_left = get_val(request.params, "spots_left")
+		floor = get_val(request.params, "floor")
+		dorm = get_val(request.params, "dorm")
 
 		# look for rooms in a certain dorm
 		# TODO send correct status code, etc

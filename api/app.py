@@ -1,15 +1,18 @@
 #!/usr/bin/python
 
-import falcon, bjoern
+import falcon, falcon_cors, bjoern
 import endpoints.rooms as rooms
 import endpoints.dorms as dorms
 import endpoints.groups as groups
-import endpoints.myinfo as myinfo
+import endpoints.student as student
 import endpoints.group_wishlist as group_wishlist
 import endpoints.student_wishlist as student_wishlist
 import session
 
-api = falcon.API()
+cors = falcon_cors.CORS(allow_all_origins=True, allow_all_methods=True, allow_all_headers=True)
+
+api = falcon.API(middleware=[cors.middleware])
+api.req_options.auto_parse_form_urlencoded = True
 
 # GET, DELETE, ###### DONE
 api.add_route("/group", groups.Group())
@@ -25,7 +28,8 @@ api.add_route("/group_wishlist", group_wishlist.GroupWishlist())
 api.add_route("/wishlist", student_wishlist.StudentWishlist())
 
 # GET ###### DONE
-api.add_route("/myinfo", myinfo.MyInfo())
+api.add_route("/myinfo", student.MyInfo())
+api.add_route("/student", student.Student())
 
 # GET ###### almost DONE
 api.add_route("/dorms", dorms.Dorm())
