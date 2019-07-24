@@ -3,7 +3,7 @@
 import private.sql as sql
 import private.constants as constants
 import private.stored_procs as procs
-import classes.rooms
+import models.rooms
 import session
 
 from utils import *
@@ -39,5 +39,5 @@ class Room:
 		room_list = []
 		if results:
 			for room in results:
-				room_list.append(classes.rooms.Room(room))
+				room_list.append(models.rooms.Room(room))
 			response.media = room_list

@@ -4,8 +4,8 @@ import json
 import private.sql as sql
 import private.constants as constants
 import private.stored_procs as procs
-import classes.group as group
-import classes.student as student
+import models.group as group
+import models.student as student
 import session
 
 from utils import *
@@ -67,7 +67,7 @@ class GroupInvite:
 		d = []
 		if results:
 			for inv in results:
-				d.append(classes.group.Invitations(inv))
+				d.append(models.group.Invitations(inv))
 			response.media = d
 	# Invite a student
 	# TODO prevent student from inviting another to a different group

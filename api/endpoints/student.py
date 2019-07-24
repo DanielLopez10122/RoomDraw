@@ -4,7 +4,7 @@ from private.sql import *
 from utils import *
 import private.constants as constants
 import private.stored_procs as procs
-import classes.student
+import models.student
 
 import session
 

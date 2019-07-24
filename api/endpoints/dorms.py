@@ -3,7 +3,7 @@
 import private.sql as sql
 import private.constants as constants
 import private.stored_procs as procs
-import classes.dorms
+import models.dorms
 import session
 
 from utils import *
@@ -28,14 +28,14 @@ class Dorm:
 		if dorm_id:
 			results = connection.run_stored_proc_for_single_item(procs.get_single_dorm, dorm_id)
 			if results:
-				response.media = classes.dorms.Dorm(results)
+				response.media = models.dorms.Dorm(results)
 		else:
 			results = connection.run_stored_proc_for_multiple_items(procs.get_dorms)
 
 			dorm_list = []
 			if results:
 				for i in results:
-					dorm = classes.dorms.Dorm(i)
+					dorm = models.dorms.Dorm(i)
 					dorm_list.append(dorm)
 
 			response.media = dorm_list

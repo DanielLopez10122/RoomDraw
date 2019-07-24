@@ -1,7 +1,7 @@
 import private.sql as sql
 import private.constants as constants
 import private.stored_procs as procs
-import classes.wishlist
+import models.wishlist
 import session
 
 from utils import *
@@ -25,7 +25,7 @@ class GroupWishlist:
 		data = []
 		print(results)
 		for i in results:
-			w = classes.wishlist.Wishlist(i)
+			w = models.wishlist.Wishlist(i)
 			data.append(w)
 			print(i)
 		response.media = data
