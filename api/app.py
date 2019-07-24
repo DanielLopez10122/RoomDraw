@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
-import falcon, falcon_cors, bjoern
+import falcon, bjoern
+from falcon_cors import CORS
 import endpoints.rooms as rooms
 import endpoints.dorms as dorms
 import endpoints.groups as groups
@@ -8,12 +9,16 @@ import endpoints.student as student
 import endpoints.group_wishlist as group_wishlist
 import endpoints.student_wishlist as student_wishlist
 import session
+from middleware.authentication import AuthenticationMiddleware
 
-cors = falcon_cors.CORS(allow_all_origins=True, allow_all_methods=True, allow_all_headers=True)
+# TODO fix this
+allowed_origins = ["*"]
 
-api = falcon.API(middleware=[cors.middleware])
-api.req_options.auto_parse_form_urlencoded = True
+cors = CORS(allow_origins_list=allowed_origins)
+authentication = AuthenticationMiddleware()
+api = falcon.API()
 
+api = falcon.API(middleware=[cors.middleware, authentication])
 # GET, DELETE, ###### DONE
 api.add_route("/group", groups.Group())
 api.add_route("/group/members", groups.GroupMembers())
@@ -29,7 +34,6 @@ api.add_route("/wishlist", student_wishlist.StudentWishlist())
 
 # GET ###### DONE
 api.add_route("/myinfo", student.MyInfo())
-api.add_route("/student", student.Student())
 
 # GET ###### almost DONE
 api.add_route("/dorms", dorms.Dorm())

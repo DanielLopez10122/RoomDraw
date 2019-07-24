@@ -14,9 +14,6 @@ class Dorm:
 		response.media = {}
 
 		session_token = get_session(request)
-		if not authenticated(session_token):
-			response.media = "Not authenticated"
-			return
 
 		try:
 			dorm_id = int(get_val(request.params, "dorm"))

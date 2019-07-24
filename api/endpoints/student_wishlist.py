@@ -12,10 +12,6 @@ class StudentWishlist:
 	def on_get(self, request, response):
 		# TODO make sure the database is up, otherwise send status code 5xx
 		session_token = get_session(request)
-		if not authenticated(session_token):
-			response.media = "Not authenticated"
-			return
-
 
 		student_id = session.id_from_session(session_token)
 		connection = sql.SQL()
@@ -30,9 +26,6 @@ class StudentWishlist:
 	def on_delete(self, request, response):
 		# TODO make sure the database is up, otherwise send status code 5xx
 		session_token = get_session(request)
-		if not authenticated(session_token):
-			response.media = "Not authenticated"
-			return
 		student_id = session.id_from_session(session_token)
 
 		try:
@@ -52,9 +45,6 @@ class StudentWishlist:
 	def on_put(self, request, response):
 		# TODO make sure the database is up, otherwise send status code 5xx
 		session_token = get_session(request)
-		if not authenticated(session_token):
-			response.media = "Not authenticated"
-			return
 
 		student_id = session.id_from_session(session_token)
 

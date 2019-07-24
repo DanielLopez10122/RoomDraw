@@ -12,9 +12,6 @@ class Student:
 	# without an id, return info on current student
 	def on_get(self, request, response):
 		session_token = get_session(request)
-		if not authenticated(session_token):
-			response.media = "Not authenticated"
-			return
 
 		ID = None
 		try:

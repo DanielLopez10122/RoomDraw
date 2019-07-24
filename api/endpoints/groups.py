@@ -14,9 +14,6 @@ class Group:
 	def on_get(self, request, response):
 		# TODO make sure the database is up, otherwise send status code 5xx
 		session_token = get_session(request)
-		if not authenticated(session_token):
-			response.media = "Not authenticated"
-			return
 
 		ID = session.id_from_session(session_token)
 		stud = get_student_by_id(ID)
@@ -33,9 +30,6 @@ class Group:
 	
 	def on_delete(self, request, response):
 		session_token = get_session(request)
-		if not authenticated(session_token):
-			response.media = "Not authenticated"
-			return
 
 		student_id = session.id_from_session(session_token)
 		connection = sql.SQL()
@@ -47,9 +41,6 @@ class GroupMembers:
 		response.media = {}
 		# TODO make sure the database is up, otherwise send status code 5xx
 		session_token = get_session(request)
-		if not authenticated(session_token):
-			response.media = "Not authenticated"
-			return
 
 		ID = session.id_from_session(session_token)
 		stud = get_student_by_id(ID)
@@ -67,9 +58,6 @@ class GroupMembers:
 class GroupInvite:
 	def on_get(self, request, response):
 		session_token = get_session(request)
-		if not authenticated(session_token):
-			response.media = "Not authenticated"
-			return
 
 		sid = session.id_from_session(session_token)
 
@@ -85,9 +73,6 @@ class GroupInvite:
 	# TODO prevent student from inviting another to a different group
 	def on_post(self, request, response):
 		session_token = get_session(request)
-		if not authenticated(session_token):
-			response.media = "Not authenticated"
-			return
 		params = json.loads(request.stream.read())
 		ID = session.id_from_session(session_token)
 		stud = get_student_by_id(ID)
@@ -106,9 +91,6 @@ class GroupInvite:
 	# Accept an invite
 	def on_put(self, request, response):
 		session_token = get_session(request)
-		if not authenticated(session_token):
-			response.media = "Not authenticated"
-			return
 		params = json.loads(request.stream.read())
 		ID = session.id_from_session(session_token)
 		gid = get_val(params, "group_id")
@@ -124,9 +106,6 @@ class GroupInvite:
 	# Decline an invite
 	def on_delete(self, request, response):
 		session_token = get_session(request)
-		if not authenticated(session_token):
-			response.media = "Not authenticated"
-			return
 
 		sid = session.id_from_session(session_token)
 		gid = get_val(request.params, "group_id")

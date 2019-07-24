@@ -12,9 +12,6 @@ class Room:
 	def on_get(self, request, response):
 		response.media = {}
 		session_token = get_session(request)
-		if not authenticated(session_token):
-			response.media = "Not authenticated"
-			return
 
 		room_number = get_val(request.params, "number")
 		spots_left = get_val(request.params, "spots_left")

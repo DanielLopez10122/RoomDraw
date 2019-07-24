@@ -10,9 +10,6 @@ class GroupWishlist:
 	def on_get(self, request, response):
 		# TODO make sure the database is up, otherwise send status code 5xx
 		session_token = get_session(request)
-		if not authenticated(session_token):
-			response.media = "Not authenticated"
-			return
 
 		ID = session.id_from_session(session_token)
 		current_student = get_student_by_id(ID)
@@ -36,9 +33,6 @@ class GroupWishlist:
 	def on_delete(self, request, response):
 		# TODO make sure the database is up, otherwise send status code 5xx
 		session_token = get_session(request)
-		if not authenticated(session_token):
-			response.media = "Not authenticated"
-			return
 		ID = session.id_from_session(session_token)
 		current_student = get_student_by_id(ID)
 
@@ -67,9 +61,6 @@ class GroupWishlist:
 	def on_put(self, request, response):
 		# TODO make sure the database is up, otherwise send status code 5xx
 		session_token = get_session(request)
-		if not authenticated(session_token):
-			response.media = "Not authenticated"
-			return
 
 		ID = session.id_from_session(session_token)
 		current_student = get_student_by_id(ID)
