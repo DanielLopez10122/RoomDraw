@@ -1,6 +1,4 @@
-import private.sql as sql
-import private.constants as constants
-import private.stored_procs as procs
+from private import *
 import models.wishlist
 import session
 
@@ -19,8 +17,7 @@ class GroupWishlist:
 			group_id = int(current_student["group_id"])
 
 		# TODO Check this
-		connection = sql.SQL()
-		results = connection.run_stored_proc_for_multiple_items(procs.get_group_wishlist, group_id)
+		results = sql_run_stored_proc_for_multiple_items(procs.get_group_wishlist, group_id)
 
 		data = []
 		print(results)
@@ -53,10 +50,7 @@ class GroupWishlist:
 			response.media = "Need a rank"
 			return
 
-		connection = sql.SQL()
-
-		connection.run_stored_proc(procs.delete_group_wishlist, group_id, rank)
-		connection.commit()
+		sql_run_stored_proc(procs.delete_group_wishlist, group_id, rank)
 	
 	def on_put(self, request, response):
 		# TODO make sure the database is up, otherwise send status code 5xx
@@ -82,7 +76,5 @@ class GroupWishlist:
 			response.media = "Missing paramaters"
 			return
 
-		connection = sql.SQL()
-
-		connection.run_stored_proc(procs.put_group_wishlist,
+		sql_run_stored_proc(procs.put_group_wishlist,
 				group_id, rank, dorm_id, room_id, floor)

@@ -1,8 +1,6 @@
 #!/usr/bin/python
 
-import private.sql as sql
-import private.constants as constants
-import private.stored_procs as procs
+from private import *
 import models.rooms
 import session
 
@@ -33,8 +31,7 @@ class Room:
 			return
 
 		# TODO add option to search for a particular room (not a priority)
-		connection = sql.SQL()
-		results = connection.run_stored_proc_for_multiple_items(procs.get_rooms,
+		results = sql_run_stored_proc_for_multiple_items(procs.get_rooms,
 				dorm, room_number, spots_left, floor)
 		room_list = []
 		if results:

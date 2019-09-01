@@ -1,8 +1,6 @@
 #!/usr/bin/python
 
-import private.sql as sql
-import private.constants as constants
-import private.stored_procs as procs
+from private import *
 import models.wishlist
 import session
 

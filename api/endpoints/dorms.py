@@ -1,8 +1,6 @@
 #!/usr/bin/python
 
-import private.sql as sql
-import private.constants as constants
-import private.stored_procs as procs
+from private import *
 import models.dorms
 import session
 
@@ -12,7 +10,6 @@ class Dorm:
 	# Get information on dorms
 	def on_get(self, request, response):
 		response.media = {}
-
 		session_token = get_session(request)
 
 		try:
@@ -24,13 +21,12 @@ class Dorm:
 			response.media = "No dorm provided"
 			return
 
-		connection = sql.SQL()
 		if dorm_id:
-			results = connection.run_stored_proc_for_single_item(procs.get_single_dorm, dorm_id)
+			results = sql_run_stored_proc_for_single_item(procs.get_single_dorm, dorm_id)
 			if results:
 				response.media = models.dorms.Dorm(results)
 		else:
-			results = connection.run_stored_proc_for_multiple_items(procs.get_dorms)
+			results = sql_run_stored_proc_for_multiple_items(procs.get_dorms)
 
 			dorm_list = []
 			if results:

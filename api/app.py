@@ -2,12 +2,7 @@
 
 import falcon, bjoern
 from falcon_cors import CORS
-import endpoints.rooms as rooms
-import endpoints.dorms as dorms
-import endpoints.groups as groups
-import endpoints.student as student
-import endpoints.group_wishlist as group_wishlist
-import endpoints.student_wishlist as student_wishlist
+from endpoints import *
 import session
 from middleware.authentication import AuthenticationMiddleware
 

@@ -1,9 +1,9 @@
 #!/usr/bin/python
 
 import mysql.connector as mysql
-import private.constants as constants
+from . import constants
 
-class SQL:
+class _SQL():
 	def __init__(self, host=constants.sql_host, user=constants.sql_user, password=constants.sql_password, db=constants.sql_db):
 		self._connection = mysql.connect(host=host, user=user, password=password, database=db)
 		self._cursor = self._connection.cursor()
@@ -35,10 +35,14 @@ class SQL:
 	def commit(self):
 		self._connection.commit()
 
-def sql_init(host=constants.sql_host, user=constants.sql_user,
+def _sql_init(host=constants.sql_host, user=constants.sql_user,
 		password=constants.sql_password, db=constants.sql_db):
-	global s
-	s = SQL()
-
+	return _SQL(host, user, password, db)
 def sql_run_stored_proc(stored_proc, *args):
+	s = _sql_init()
 	s.run_stored_proc(stored_proc, *args)
+	s.commit()
+def sql_run_stored_proc_for_single_item(stored_proc, *args):
+	return _sql_init().run_stored_proc_for_single_item(stored_proc, *args)
+def sql_run_stored_proc_for_single_item(stored_proc, *args):
+	return _sql_init().run_stored_proc_for_multiple_items(stored_proc, *args)

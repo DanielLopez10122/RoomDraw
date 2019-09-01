@@ -1,9 +1,7 @@
 #!/usr/bin/python
 
-from private.sql import *
 from utils import *
-import private.constants as constants
-import private.stored_procs as procs
+from private import *
 import models.student
 
 import session

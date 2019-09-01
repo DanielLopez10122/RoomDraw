@@ -1,8 +1,7 @@
 #!/usr/bin/python
 
-from private.sql import SQL
+from private import *
 import session
-import private.stored_procs as procs
 import models.student
 
 def get_session(request):
