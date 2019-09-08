@@ -12,7 +12,8 @@ class API(object):
 		# TODO fix this
 		self.allowed_origins = ["*"]
 		self._setup_cors()
-		self._setup_errors()
+		# self._setup_errors()
+		self._setup_endpoints()
 
 	def _setup_cors(self):
 		self.cors_middleware = CORS(allow_origins_list=self.allowed_origins)
@@ -23,31 +24,26 @@ class API(object):
 	def _setup_errors(self):
 		self.api.add_error_handler(Exception, InternalServerError)
 
-	def add_route(self, route, obj):
-		self.api.add_route(route, obj)
+	def _setup_endpoints(self):
+		# GET, DELETE, ###### DONE
+		self.api.add_route("/group", groups.Group())
+		self.api.add_route("/group/members", groups.GroupMembers())
+		# GET, DELETE, PUT
+		self.api.add_route("/group/invite", groups.GroupInvite())
+		# GET, PUT, DELETE ###### Done
+		self.api.add_route("/group_wishlist", group_wishlist.GroupWishlist())
+		# GET, PUT, DELETE ###### Done
+		self.api.add_route("/wishlist", student_wishlist.StudentWishlist())
+		# GET ###### DONE
+		self.api.add_route("/myinfo", student.MyInfo())
+		# GET ###### almost DONE
+		self.api.add_route("/dorms", dorms.Dorm())
+		# GET ###### almost DONE
+		self.api.add_route("/rooms", rooms.Room())
 
-def main(debug=True):
-	api = API()
+api = API()
 
-	# GET, DELETE, ###### DONE
-	api.add_route("/group", groups.Group())
-	api.add_route("/group/members", groups.GroupMembers())
-	# GET, DELETE, PUT
-	api.add_route("/group/invite", groups.GroupInvite())
-	# GET, PUT, DELETE ###### Done
-	api.add_route("/group_wishlist", group_wishlist.GroupWishlist())
-	# GET, PUT, DELETE ###### Done
-	api.add_route("/wishlist", student_wishlist.StudentWishlist())
-	# GET ###### DONE
-	api.add_route("/myinfo", student.MyInfo())
-	# GET ###### almost DONE
-	api.add_route("/dorms", dorms.Dorm())
-	# GET ###### almost DONE
-	api.add_route("/rooms", rooms.Room())
-
-	if debug:
-		# for testing
-		session.create_session(0, "alex")
-		session.create_session(1, "denton")
-		session.create_session(2, "eli")
-		session.create_session(3, "michael")
+session.create_session(0, "alex")
+session.create_session(1, "denton")
+session.create_session(2, "eli")
+session.create_session(3, "michael")

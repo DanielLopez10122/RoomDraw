@@ -3,7 +3,6 @@
 from utils import *
 
 _sessions = {}
-# _sessions = {"alex": 0, "denton": 1, "eli": 2, "michael": 3}
 
 def id_from_session(session_token):
 	if session_token in _sessions:

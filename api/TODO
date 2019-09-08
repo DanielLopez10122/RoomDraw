@@ -1,1 +1,4 @@
 Remove custom sql code andd replace with sqlalchemy
+Create oidc and saml framework
+Validate tokens
+Return correct http response codes
