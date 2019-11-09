@@ -1,5 +1,5 @@
-import { Student } from './Student';
-import { Invitations } from './Invitations';
+import { Student } from '../models/Student';
+import { Invitations } from '../models/Invitations';
 import { StudentService } from './student.service';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';

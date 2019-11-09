@@ -1,6 +1,6 @@
-import { Student } from '../Student';
-import { StudentService } from '../student.service';
-import { GroupService } from '../group.service';
+import { Student } from '../../models/Student';
+import { StudentService } from '../../services/student.service';
+import { GroupService } from '../../services/group.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({

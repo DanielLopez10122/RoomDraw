@@ -1,7 +1,7 @@
-import { Student } from '../Student';
-import { Invitations } from '../Invitations';
-import { StudentService } from '../student.service';
-import { GroupService } from '../group.service';
+import { Student } from '../../models/Student';
+import { Invitations } from '../../models/Invitations';
+import { StudentService } from '../../services/student.service';
+import { GroupService } from '../../services/group.service';
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 

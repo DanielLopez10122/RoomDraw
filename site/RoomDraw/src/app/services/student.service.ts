@@ -1,4 +1,4 @@
-import { Student } from './Student'
+import { Student } from '../models/Student'
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
