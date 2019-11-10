@@ -21,7 +21,7 @@ class Student:
 			ID = session.id_from_session(session_token)
 
 		student = get_student_by_id(ID)
-		response.media = student
+		response.media = student.dict()
 
 class MyInfo:
 	def on_get(self, request, response):

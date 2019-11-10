@@ -1,17 +1,18 @@
 #!/usr/bin/python
 
-class GroupInfo(dict):
-	def __init__(self, info):
-		self.info                  = {}
-		self.info["group_id"]      = info[0]
-		self.info["random_number"] = info[1]
-		self.info["grade_level"]   = info[2]
-		dict.__init__(self, self.info)
+from sqlalchemy import Column, Integer, Enum
+from models.base import Model, OrmModel
 
-class Invitations(dict):
-	def __init__(self, info):
-		self.info                  = {}
-		self.info["group_id"]      = info[0]
-		self.info["random_number"] = info[1]
-		self.info["grade_level"]   = info[2]
-		dict.__init__(self, self.info)
+class Group(Model, OrmModel):
+	__tablename__ = 'Groups'
+
+	group_id = Column(Integer, primary_key=True)
+	random_number = Column(Integer)
+	grade_level = Column(Integer)
+	sex = Column(Enum('M', 'F'))
+
+class Invitations(Model, OrmModel):
+	__tablename__ = 'GroupInvites'
+
+	student_id = Column(Integer, primary_key=True)
+	group_id = Column(Integer, primary_key=True)

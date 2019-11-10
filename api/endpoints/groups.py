@@ -2,8 +2,8 @@
 
 import json
 from private import *
-import models.group as group
-import models.student as student
+import models.group
+import models.student
 import session
 
 from utils import *
@@ -14,14 +14,14 @@ class Group:
 		session_token = get_session(request)
 
 		ID = session.id_from_session(session_token)
-		stud = get_student_by_id(ID)
-		gid = stud.info["group_id"]
+		student = get_student_by_id(ID)
+		gid = student.group_id
 
-		results = sql_run_stored_proc_for_single_item(procs.get_group, gid)
+		sql = sql_create_session()
+		group = sql.query(models.group.Group).filter_by(group_id=gid).first()
 
-		if results:
-			g = group.GroupInfo(results)
-			response.media = g
+		if group:
+			response.media = group.dict(exclude=[sex])
 		else:
 			response.media = "{}"
 	
@@ -38,16 +38,15 @@ class GroupMembers:
 		session_token = get_session(request)
 
 		ID = session.id_from_session(session_token)
-		stud = get_student_by_id(ID)
-		gid = stud.info["group_id"]
+		student = get_student_by_id(ID)
+		gid = student.group_id
 
-		results = sql_run_stored_proc_for_multiple_items(procs.get_group_members, gid)
+		sql = sql_create_session()
+		members = sql.query(models.student.Student).filter_by(group_id=gid).all()
 
-		group_list = []
-		if results:
-			for person in results:
-				group_list.append(student.Student(person))
-			response.media = group_list
+		response.media = []
+		for person in members:
+			response.media.append(person.dict())
 
 class GroupInvite:
 	def on_get(self, request, response):
@@ -57,11 +56,10 @@ class GroupInvite:
 
 		results = sql_run_stored_proc_for_multiple_items(procs.get_group_invites, sid)
 
-		d = []
+		response.media = []
 		if results:
 			for inv in results:
-				d.append(models.group.Invitations(inv))
-			response.media = d
+				response.media.append(models.group.Invitations(inv))
 	# Invite a student
 	# TODO prevent student from inviting another to a different group
 	def on_post(self, request, response):
