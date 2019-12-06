@@ -2,14 +2,12 @@
 
 from private import *
 import models.rooms
-import session
 
 from utils import *
 
-class Room:
+class Room(Endpoint):
 	def on_get(self, request, response):
 		response.media = {}
-		session_token = get_session(request)
 
 		room_number = get_val(request.params, "number")
 		spots_left = get_val(request.params, "spots_left")

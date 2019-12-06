@@ -6,12 +6,10 @@ import session
 
 from utils import *
 
-class Dorm:
+class Dorm(Endpoint):
 	# Get information on dorms
 	def on_get(self, request, response):
 		response.media = {}
-		session_token = get_session(request)
-
 		try:
 			dorm_id = int(get_val(request.params, "dorm"))
 		except ValueError: # Anything other than an int but not None

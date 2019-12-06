@@ -1,16 +1,12 @@
 from private import *
 import models.wishlist
-import session
 
 from utils import *
 
-class GroupWishlist:
+class GroupWishlist(Endpoint):
 	def on_get(self, request, response):
 		# TODO make sure the database is up, otherwise send status code 5xx
-		session_token = get_session(request)
-
-		ID = session.id_from_session(session_token)
-		current_student = get_student_by_id(ID)
+		current_student = get_student_by_id(self.student_id)
 
 		group_id = None
 		if current_student:
@@ -29,9 +25,7 @@ class GroupWishlist:
 
 	def on_delete(self, request, response):
 		# TODO make sure the database is up, otherwise send status code 5xx
-		session_token = get_session(request)
-		ID = session.id_from_session(session_token)
-		current_student = get_student_by_id(ID)
+		current_student = get_student_by_id(self.student_id)
 
 		group_id = None
 		if current_student:
@@ -54,10 +48,7 @@ class GroupWishlist:
 	
 	def on_put(self, request, response):
 		# TODO make sure the database is up, otherwise send status code 5xx
-		session_token = get_session(request)
-
-		ID = session.id_from_session(session_token)
-		current_student = get_student_by_id(ID)
+		current_student = get_student_by_id(self.student_id)
 
 		group_id = None
 		if current_student:
