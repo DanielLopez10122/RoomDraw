@@ -16,7 +16,7 @@ class API(object):
 		self._setup_endpoints()
 
 	def _setup_cors(self):
-		self.cors_middleware = CORS(allow_origins_list=self.allowed_origins)
+		self.cors_middleware = CORS(allow_all_origins=True, allow_all_headers=True, allow_all_methods=True)
 		self.authentication_middleware = AuthenticationMiddleware()
 
 		self.api = falcon.API(middleware=[self.cors_middleware.middleware, self.authentication_middleware])
