@@ -35,6 +35,7 @@ class API(object):
 		# GET, PUT, DELETE ###### Done
 		self.api.add_route("/wishlist", student_wishlist.StudentWishlist())
 		# GET ###### DONE
+		self.api.add_route("/student", student.Student())
 		self.api.add_route("/myinfo", student.MyInfo())
 		# GET ###### almost DONE
 		self.api.add_route("/dorms", dorms.Dorm())
