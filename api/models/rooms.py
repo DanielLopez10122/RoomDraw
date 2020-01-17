@@ -1,12 +1,15 @@
 #!/usr/bin/python
 
-class Room(dict):
-	def __init__(self, info):
-		self.info = {}
-		self.info["room_number"]     = info[0]
-		self.info["dorm_id"]         = info[1]
-		self.info["capacity"]        = info[2]
-		self.info["available_spots"] = info[3]
-		self.info["description"]     = info[4]
-		self.info["floor"]           = info[5]
-		dict.__init__(self, self.info)
+from sqlalchemy import Column, Integer, String, Enum, LargeBinary
+
+from models.base import Model, OrmModel
+
+class Room(Model, OrmModel):
+	__tablename__ = 'Rooms'
+
+	room_number     = Column(Integer, primary_key=True)
+	dorm_id         = Column(Integer, primary_key=True)
+	capacity        = Column(Integer)
+	available_spots = Column(Integer)
+	description     = Column(String)
+	floor           = Column(Integer)

@@ -11,7 +11,7 @@ class Group(Model, OrmModel):
 	grade_level = Column(Integer)
 	sex = Column(Enum('M', 'F'))
 
-class Invitations(Model, OrmModel):
+class Invitation(Model, OrmModel):
 	__tablename__ = 'GroupInvites'
 
 	student_id = Column(Integer, primary_key=True)

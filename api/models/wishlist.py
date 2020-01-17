@@ -1,10 +1,18 @@
 #!/usr/bin/python
 
-class Wishlist(dict):
-	def __init__(self, info):
-		self.info            = {}
-		self.info["rank"]    = info[0]
-		self.info["dorm_id"] = info[1]
-		self.info["room_id"] = info[2]
-		self.info["floor"]   = info[3]
-		dict.__init__(self, self.info)
+from sqlalchemy import Column, Integer, String, Enum
+from models.base import Model, OrmModel
+
+class Wishlist(Model, OrmModel):
+	rank    = Column(Integer, primary_key=True)
+	dorm_id = Column(Integer)
+	room_id = Column(Integer)
+	floor   = Column(Integer)
+
+class GroupWishlist(Wishlist):
+	__tablename__ = 'GroupWishlists'
+	group_id      = Column(Integer, primary_key=True)
+
+class StudentWishlist(Wishlist):
+	__tablename__ = 'StudentWishlists'
+	group_id      = Column(Integer, primary_key=True)

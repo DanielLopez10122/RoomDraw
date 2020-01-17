@@ -5,7 +5,7 @@ import models.wishlist
 
 from utils import *
 
-class StudentWishlist(Endpoint):
+class StudentWishlist(object):
 	def on_get(self, request, response):
 		# TODO make sure the database is up, otherwise send status code 5xx
 		connection = sql.SQL()

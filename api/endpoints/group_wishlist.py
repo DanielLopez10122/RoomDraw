@@ -1,35 +1,31 @@
+import falcon
 from private import *
 import models.wishlist
 
 from utils import *
+from endpoints.hooks import on_request
 
-class GroupWishlist(Endpoint):
+@falcon.before(on_request)
+class GroupWishlist(object):
 	def on_get(self, request, response):
 		# TODO make sure the database is up, otherwise send status code 5xx
-		current_student = get_student_by_id(self.student_id)
+		student = get_student_by_id(self.student_id)
+		group_id = student.group_id
 
-		group_id = None
-		if current_student:
-			group_id = int(current_student["group_id"])
+		sql = sql_create_session()
+		wishlist = sql.query(models.wishlist.GroupWishlist).filter_by(group_id=group_id).all()
 
-		# TODO Check this
-		results = sql_run_stored_proc_for_multiple_items(procs.get_group_wishlist, group_id)
-
-		data = []
-		print(results)
-		for i in results:
-			w = models.wishlist.Wishlist(i)
-			data.append(w)
-			print(i)
-		response.media = data
+		response.media = []
+		for item in wishlist:
+			response.media.append(item.dict(exclude='group_id'))
 
 	def on_delete(self, request, response):
 		# TODO make sure the database is up, otherwise send status code 5xx
-		current_student = get_student_by_id(self.student_id)
+		student = get_student_by_id(self.student_id)
 
 		group_id = None
-		if current_student:
-			group_id = current_student["gid"]
+		if student:
+			group_id = student["gid"]
 
 		try:
 			rank = int(get_val(request.params, "rank"))
