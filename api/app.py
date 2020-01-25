@@ -12,11 +12,11 @@ class API(object):
 	def __init__(self):
 		# TODO fix this
 		self.allowed_origins = ["*"]
-		self._setup_cors()
+		self._setup_middleware()
 		# self._setup_errors()
 		self._setup_endpoints()
 
-	def _setup_cors(self):
+	def _setup_middleware(self):
 		self.cors_middleware = CORS(allow_all_origins=True, allow_all_headers=True, allow_all_methods=True)
 		self.authentication_middleware = AuthenticationMiddleware()
 		self.resource_middleware = ResourceMiddleware()
