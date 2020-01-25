@@ -10,15 +10,7 @@ from utils import *
 class Dorm(object):
 	# Get information on dorms
 	def on_get(self, request, response):
-		response.media = {}
-		dorm_id = None
-		try:
-			dorm_id = int(get_val(request.params, "dorm"))
-		except ValueError: # Anything other than an int but not None
-			response.media = "Invalid paramaters"
-			return
-		except TypeError: # if parameter wasn't provided
-			pass
+		dorm_id = INT(request.params.get("dorm"), nullable=True)
 
 		student = get_student_by_id(self.student_id)
 

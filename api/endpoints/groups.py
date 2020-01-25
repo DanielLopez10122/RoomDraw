@@ -9,7 +9,6 @@ import session
 
 from utils import *
 
-
 def reinit_group(group_id, session=None):
 	"""Reinitialize the group data based on the "highest-weighted" student"""
 	commit = False
@@ -92,12 +91,8 @@ class GroupInvite(object):
 		params = json.loads(request.stream.read())
 		stud = get_student_by_id(self.student_id)
 
-		recepient = get_val(params, "student_id")
+		recepient = INT(params.get("student_id"))
 		gid = stud.group_id
-
-		if recepient is None or gid is None:
-			response.media = "Missing parameters"
-			return
 
 		sql = sql_create_session()
 		invitation = sql.query(models.group.Invitation).filter_by(student_id=recepient, group_id=gid).first()
@@ -111,10 +106,7 @@ class GroupInvite(object):
 	# Accept an invite
 	def on_put(self, request, response):
 		params = json.loads(request.stream.read())
-		gid = get_val(params, "group_id")
-		if gid is None:
-			response.media = "Need a group to accept"
-			return
+		gid = INT(params.get("group_id"))
 
 		sql = sql_create_session()
 		student = get_student_by_id(self.student_id, sql)
@@ -126,11 +118,7 @@ class GroupInvite(object):
 
 	# Decline an invite
 	def on_delete(self, request, response):
-		gid = get_val(request.params, "group_id")
-
-		if gid is None:
-			response.media = "Please provide a group id to decline"
-			return
+		gid = INT(request.params.get("group_id"))
 
 		sql = sql_create_session()
 		sql.query(models.group.Invitation).filter_by(student_id=self.student_id, group_id=gid).delete()

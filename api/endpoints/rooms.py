@@ -8,25 +8,10 @@ from utils import *
 
 class Room(object):
 	def on_get(self, request, response):
-		response.media = {}
-
-		room_number = get_val(request.params, "number")
-		spots_left = get_val(request.params, "spots_left")
-		floor = get_val(request.params, "floor")
-		dorm = get_val(request.params, "dorm")
-
-		# look for rooms in a certain dorm
-		if dorm is None:
-			response.media = "I need a dorm id to continue"
-			return
-
-		try:
-			room_number = int(room_number)
-			spots_left  = int(spots_left)
-			floor       = int(floor)
-		except (TypeError, ValueError):
-			response.media = "Bad or missing parameter somewhere"
-			return
+		room_number = INT(request.params.get("room_number"))
+		spots_left =  INT(request.params.get("spots_left"))
+		floor =       INT(request.params.get("floor"))
+		dorm_id =     INT(request.params.get("dorm_id"))
 
 		sql = sql_create_session()
-		response.media = sql.query(models.rooms.Room).filter_by(dorm_id=dorm, room_number=room_number, available_spots=spots_left, floor=floor).first().dict()
+		response.media = sql.query(models.rooms.Room).filter_by(dorm_id_id=dorm_id, room_number=room_number, available_spots=spots_left, floor=floor).first().dict()

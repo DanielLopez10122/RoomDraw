@@ -22,18 +22,7 @@ class GroupWishlist(object):
 
 		group_id = student.group_id
 
-		try:
-			rank = int(get_val(request.params, "rank"))
-		except ValueError:
-			response.media = "Invalid rank"
-			return
-		except TypeError:
-			response.media = "No rank provided"
-			return
-
-		if rank is None:
-			response.media = "Need a rank"
-			return
+		rank = INT(request.params.get("rank"))
 
 		sql.query(models.wishlist.GroupWishlist).filter_by(rank=rank, group_id=group_id).delete()
 		wishlist = sql.query(models.wishlist.GroupWishlist).filter(models.wishlist.GroupWishlist.rank > rank).filter_by(group_id=group_id).all()
@@ -47,18 +36,10 @@ class GroupWishlist(object):
 
 		group_id = student.group_id
 
-		try:
-			rank     = int(request.params["rank"]) if "rank" in request.params else None
-			dorm_id  = int(request.params["dorm_id"]) if "dorm_id" in request.params else None
-			room_id  = int(request.params["room_id"]) if "room_id" in request.params else None
-			floor    = int(request.params["floor"]) if "floor" in request.params else None
-		except ValueError:
-			response.media = "Invalid paramaters"
-			return
-
-		if not group_id or not rank or not dorm_id:
-			response.media = "Missing paramaters"
-			return
+		rank = INT(request.params.get("rank"))
+		dorm_id = INT(request.params.get("dorm_id"))
+		room_id = INT(request.params.get("room_id"), nullable=True)
+		floor = INT(request.params.get("floor"), nullable=True)
 
 		wishlist = sql.query(models.wishlist.GroupWishlist).filter_by(group_id=group_id).all()
 
