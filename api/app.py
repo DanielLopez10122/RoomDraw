@@ -27,21 +27,14 @@ class API(object):
 		self.api.add_error_handler(Exception, InternalServerError)
 
 	def _setup_endpoints(self):
-		# GET, DELETE, ###### DONE
 		self.api.add_route("/group", groups.Group())
 		self.api.add_route("/group/members", groups.GroupMembers())
-		# GET, DELETE, PUT
 		self.api.add_route("/group/invite", groups.GroupInvite())
-		# GET, PUT, DELETE ###### Done
 		self.api.add_route("/group_wishlist", group_wishlist.GroupWishlist())
-		# GET, PUT, DELETE ###### Done
 		self.api.add_route("/wishlist", student_wishlist.StudentWishlist())
-		# GET ###### DONE
 		self.api.add_route("/student", student.Student())
 		self.api.add_route("/myinfo", student.MyInfo())
-		# GET ###### almost DONE
 		self.api.add_route("/dorms", dorms.Dorm())
-		# GET ###### almost DONE
 		self.api.add_route("/rooms", rooms.Room())
 
 api = API()

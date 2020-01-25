@@ -69,7 +69,6 @@ class Group(object):
 class GroupMembers(object):
 	def on_get(self, request, response):
 		response.media = {}
-		# TODO make sure the database is up, otherwise send status code 5xx
 		stud = get_student_by_id(self.student_id)
 		gid = stud.group_id
 
@@ -89,7 +88,6 @@ class GroupInvite(object):
 			response.media.append(inv.dict(exclude='student_id'))
 
 	# Invite a student
-	# TODO prevent student from inviting another to a different group
 	def on_post(self, request, response):
 		params = json.loads(request.stream.read())
 		stud = get_student_by_id(self.student_id)
@@ -112,7 +110,6 @@ class GroupInvite(object):
 
 	# Accept an invite
 	def on_put(self, request, response):
-		# TODO MAKE SURE THE USER HAS BEEN INVITED TO THE GROUP!
 		params = json.loads(request.stream.read())
 		gid = get_val(params, "group_id")
 		if gid is None:

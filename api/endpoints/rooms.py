@@ -16,7 +16,6 @@ class Room(object):
 		dorm = get_val(request.params, "dorm")
 
 		# look for rooms in a certain dorm
-		# TODO send correct status code, etc
 		if dorm is None:
 			response.media = "I need a dorm id to continue"
 			return
