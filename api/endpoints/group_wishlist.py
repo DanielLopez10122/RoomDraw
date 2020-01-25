@@ -8,7 +8,6 @@ from endpoints.hooks import on_request
 @falcon.before(on_request)
 class GroupWishlist(object):
 	def on_get(self, request, response):
-		# TODO make sure the database is up, otherwise send status code 5xx
 		student = get_student_by_id(self.student_id)
 		group_id = student.group_id
 
@@ -20,12 +19,10 @@ class GroupWishlist(object):
 			response.media.append(item.dict(exclude='group_id'))
 
 	def on_delete(self, request, response):
-		# TODO make sure the database is up, otherwise send status code 5xx
 		student = get_student_by_id(self.student_id)
+		sql = sql_create_session()
 
-		group_id = None
-		if student:
-			group_id = student["gid"]
+		group_id = student.group_id
 
 		try:
 			rank = int(get_val(request.params, "rank"))
@@ -40,15 +37,18 @@ class GroupWishlist(object):
 			response.media = "Need a rank"
 			return
 
-		sql_run_stored_proc(procs.delete_group_wishlist, group_id, rank)
+		sql.query(models.wishlist.GroupWishlist).filter_by(rank=rank, group_id=group_id).delete()
+		wishlist = sql.query(models.wishlist.GroupWishlist).filter(models.wishlist.GroupWishlist.rank > rank)
+			.filter_by(group_id=group_id)all()
+
+		for option in wishlist:
+			option.rank -= 1
+		sql.commit()
 	
 	def on_put(self, request, response):
-		# TODO make sure the database is up, otherwise send status code 5xx
-		current_student = get_student_by_id(self.student_id)
+		student = get_student_by_id(self.student_id)
 
-		group_id = None
-		if current_student:
-			group_id = current_student["gid"]
+		group_id = student.group_id
 
 		try:
 			rank     = int(request.params["rank"]) if "rank" in request.params else None
@@ -63,5 +63,12 @@ class GroupWishlist(object):
 			response.media = "Missing paramaters"
 			return
 
-		sql_run_stored_proc(procs.put_group_wishlist,
-				group_id, rank, dorm_id, room_id, floor)
+		wishlist = sql.query(models.wishlist.GroupWishlist).filter_by(group_id=group_id).all()
+
+		for value in wishlist:
+			if value.rank >= rank:
+				value.rank += 1
+
+		item = models.wishlist.GroupWishlist(group_id=group_id, rank=rank, dorm_id=dorm_id, room_id=room_id, floor=floor)
+		sql.add(item)
+		sql.commit()
