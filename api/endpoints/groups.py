@@ -37,10 +37,7 @@ class Group(object):
 		sql = sql_create_session()
 		group = sql.query(models.group.Group).filter_by(group_id=gid).first()
 
-		if group:
-			response.media = group.dict()
-		else:
-			response.media = "{}"
+		response.media = group.dict() if group else "{}"
 	
 	# Leave the group
 	def on_delete(self, request, response):
@@ -67,7 +64,6 @@ class Group(object):
 
 class GroupMembers(object):
 	def on_get(self, request, response):
-		response.media = {}
 		stud = get_student_by_id(self.student_id)
 		gid = stud.group_id
 
@@ -97,7 +93,6 @@ class GroupInvite(object):
 		sql = sql_create_session()
 		invitation = sql.query(models.group.Invitation).filter_by(student_id=recepient, group_id=gid).first()
 		if invitation is not None:
-			response.media = "invitation already exists"
 			return
 		invitation = models.group.Invitation(student_id=recepient, group_id=gid)
 		sql.add(invitation)
