@@ -8,14 +8,14 @@ import models.student
 def get_session(request):
 	return request.headers.get("SESSION-ID")
 
-def get_student_by_id(student_id):
+def get_student_by_id(student_id, session=None):
 	if student_id is None:
 		return None
+	# useful if we want to update data
+	if session is None:
+		session = sql_create_session()
 
-	item = sql_run_stored_proc_for_single_item(procs.get_student, student_id)
-	if not item:
-		return None
-	return models.student.Student(item)
+	return session.query(models.student.Student).filter_by(student_id=student_id).first()
 
 def get_val(dictionary, key):
 	return dictionary[key] if key in dictionary else None

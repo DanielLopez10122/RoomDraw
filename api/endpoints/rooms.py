@@ -1,15 +1,16 @@
 #!/usr/bin/python
 
+import falcon
 from private import *
 import models.rooms
-import session
 
 from utils import *
+from endpoints.hooks import on_request
 
-class Room:
+@falcon.before(on_request)
+class Room(object):
 	def on_get(self, request, response):
 		response.media = {}
-		session_token = get_session(request)
 
 		room_number = get_val(request.params, "number")
 		spots_left = get_val(request.params, "spots_left")
@@ -30,11 +31,5 @@ class Room:
 			response.media = "Bad or missing parameter somewhere"
 			return
 
-		# TODO add option to search for a particular room (not a priority)
-		results = sql_run_stored_proc_for_multiple_items(procs.get_rooms,
-				dorm, room_number, spots_left, floor)
-		room_list = []
-		if results:
-			for room in results:
-				room_list.append(models.rooms.Room(room))
-			response.media = room_list
+		sql = sql_create_session()
+		response.media = sql.query(models.rooms.Room).filter_by(dorm_id=dorm, room_number=room_number, available_spots=spots_left, floor=floor).first().dict()
