@@ -3,24 +3,15 @@
 import falcon
 from utils import *
 from private import *
-import models.student
+import models
 
 import session
 
-from endpoints.hooks import on_request
-
-@falcon.before(on_request)
 class Student(object):
 	# without an id, return info on current student
 	def on_get(self, request, response):
-		ID = None
-		try:
-			ID = int(get_val(request.params, "id"))
-		except ValueError:
-			response.media = "Invalid ID"
-			return
-		except TypeError:
-			ID = self.student_id
+		ID = INT(request.params.get("id"), nullable=True)
+		if ID is None: ID = self.student_id
 
 		student = get_student_by_id(ID)
 		response.media = student.dict()

@@ -3,13 +3,10 @@
 import falcon
 import json
 from private import *
-import models.group
-import models.student
+import models
 import session
 
 from utils import *
-
-from endpoints.hooks import on_request
 
 def reinit_group(group_id, session=None):
 	"""Reinitialize the group data based on the "highest-weighted" student"""
@@ -18,7 +15,7 @@ def reinit_group(group_id, session=None):
 		session = sql_create_session()
 		commit = True
 	members = get_group_members(group_id, session)
-	group = session.query(models.group.Group).filter_by(group_id=group_id).first()
+	group = session.query(models.Group).filter_by(group_id=group_id).first()
 	# update the group
 	group.random_number = min(members, key=lambda student : student.random_number).random_number
 	group.grade_level = max(members, key=lambda student : student.grade_level).grade_level
@@ -29,21 +26,17 @@ def reinit_group(group_id, session=None):
 def get_group_members(group_id, session=None):
 	if session is None:
 		session = sql_create_session()
-	return session.query(models.student.Student).filter_by(group_id=group_id).all()
+	return session.query(models.Student).filter_by(group_id=group_id).all()
 
-@falcon.before(on_request)
 class Group(object):
 	def on_get(self, request, response):
 		stud = get_student_by_id(self.student_id)
 		gid = stud.group_id
 
 		sql = sql_create_session()
-		group = sql.query(models.group.Group).filter_by(group_id=gid).first()
+		group = sql.query(models.Group).filter_by(group_id=gid).first()
 
-		if group:
-			response.media = group.dict()
-		else:
-			response.media = "{}"
+		response.media = group.dict() if group else "{}"
 	
 	# Leave the group
 	def on_delete(self, request, response):
@@ -70,10 +63,8 @@ class Group(object):
 
 class GroupMembers(object):
 	def on_get(self, request, response):
-		response.media = {}
-		# TODO make sure the database is up, otherwise send status code 5xx
 		stud = get_student_by_id(self.student_id)
-		gid = stud.info["group_id"]
+		gid = stud.group_id
 
 		sql = sql_create_session()
 		members = get_group_members(gid)
@@ -82,62 +73,47 @@ class GroupMembers(object):
 		for person in members:
 			response.media.append(person.dict())
 
-@falcon.before(on_request)
 class GroupInvite(object):
 	def on_get(self, request, response):
 		sql = sql_create_session()
-		invitations = sql.query(models.group.Invitation).filter_by(student_id=self.student_id).all()
+		invitations = sql.query(models.Invitation).filter_by(student_id=self.student_id).all()
 		response.media = []
 		for inv in invitations:
 			response.media.append(inv.dict(exclude='student_id'))
 
 	# Invite a student
-	# TODO prevent student from inviting another to a different group
 	def on_post(self, request, response):
 		params = json.loads(request.stream.read())
 		stud = get_student_by_id(self.student_id)
 
-		recepient = get_val(params, "student_id")
+		recepient = INT(params.get("student_id"))
 		gid = stud.group_id
 
-		if recepient is None or gid is None:
-			response.media = "Missing parameters"
-			return
-
 		sql = sql_create_session()
-		invitation = sql.query(models.group.Invitation).filter_by(student_id=recepient, group_id=gid).first()
+		invitation = sql.query(models.Invitation).filter_by(student_id=recepient, group_id=gid).first()
 		if invitation is not None:
-			response.media = "invitation already exists"
 			return
-		invitation = models.group.Invitation(student_id=recepient, group_id=gid)
+		invitation = models.Invitation(student_id=recepient, group_id=gid)
 		sql.add(invitation)
 		sql.commit()
 
 	# Accept an invite
 	def on_put(self, request, response):
-		# TODO MAKE SURE THE USER HAS BEEN INVITED TO THE GROUP!
 		params = json.loads(request.stream.read())
-		gid = get_val(params, "group_id")
-		if gid is None:
-			response.media = "Need a group to accept"
-			return
+		gid = INT(params.get("group_id"))
 
 		sql = sql_create_session()
 		student = get_student_by_id(self.student_id, sql)
 		student.group_id = gid
 		reinit_group(gid, sql)
 
-		sql.query(models.group.Invitation).filter_by(student_id=self.student_id).delete()
+		sql.query(models.Invitation).filter_by(student_id=self.student_id).delete()
 		sql.commit()
 
 	# Decline an invite
 	def on_delete(self, request, response):
-		gid = get_val(request.params, "group_id")
-
-		if gid is None:
-			response.media = "Please provide a group id to decline"
-			return
+		gid = INT(request.params.get("group_id"))
 
 		sql = sql_create_session()
-		sql.query(models.group.Invitation).filter_by(student_id=self.student_id, group_id=gid).delete()
+		sql.query(models.Invitation).filter_by(student_id=self.student_id, group_id=gid).delete()
 		sql.commit()
