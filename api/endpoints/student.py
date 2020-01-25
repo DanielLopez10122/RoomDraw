@@ -3,7 +3,7 @@
 import falcon
 from utils import *
 from private import *
-import models.student
+import models
 
 import session
 

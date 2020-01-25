@@ -4,7 +4,7 @@ import falcon
 from private.sql import *
 from private import stored_procs as procs
 import session
-import models.student
+import models
 
 def get_session(request):
 	return request.headers.get("SESSION-ID")
@@ -16,7 +16,7 @@ def get_student_by_id(student_id, session=None):
 	if session is None:
 		session = sql_create_session()
 
-	return session.query(models.student.Student).filter_by(student_id=student_id).first()
+	return session.query(models.Student).filter_by(student_id=student_id).first()
 
 def INT(value, nullable=False):
 	"""

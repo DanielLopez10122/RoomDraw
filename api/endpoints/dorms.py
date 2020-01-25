@@ -2,7 +2,7 @@
 
 import falcon
 from private import *
-import models.dorms
+import models
 import session
 
 from utils import *
@@ -15,7 +15,7 @@ class Dorm(object):
 		student = get_student_by_id(self.student_id)
 
 		sql = sql_create_session()
-		results = sql.query(models.dorms.Dorm).filter_by(sex=student.sex)
+		results = sql.query(models.Dorm).filter_by(sex=student.sex)
 
 		if dorm_id is not None:
 			response.media = results.filter_by(dorm_id=dorm_id).first().dict()
