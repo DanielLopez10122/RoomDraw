@@ -5,9 +5,7 @@ from private import *
 import models.rooms
 
 from utils import *
-from endpoints.hooks import on_request
 
-@falcon.before(on_request)
 class Room(object):
 	def on_get(self, request, response):
 		response.media = {}

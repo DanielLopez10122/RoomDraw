@@ -9,7 +9,6 @@ import session
 
 from utils import *
 
-from endpoints.hooks import on_request
 
 def reinit_group(group_id, session=None):
 	"""Reinitialize the group data based on the "highest-weighted" student"""
@@ -31,7 +30,6 @@ def get_group_members(group_id, session=None):
 		session = sql_create_session()
 	return session.query(models.student.Student).filter_by(group_id=group_id).all()
 
-@falcon.before(on_request)
 class Group(object):
 	def on_get(self, request, response):
 		stud = get_student_by_id(self.student_id)
@@ -73,7 +71,7 @@ class GroupMembers(object):
 		response.media = {}
 		# TODO make sure the database is up, otherwise send status code 5xx
 		stud = get_student_by_id(self.student_id)
-		gid = stud.info["group_id"]
+		gid = stud.group_id
 
 		sql = sql_create_session()
 		members = get_group_members(gid)
@@ -82,7 +80,6 @@ class GroupMembers(object):
 		for person in members:
 			response.media.append(person.dict())
 
-@falcon.before(on_request)
 class GroupInvite(object):
 	def on_get(self, request, response):
 		sql = sql_create_session()

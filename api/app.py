@@ -5,6 +5,7 @@ from falcon_cors import CORS
 from endpoints import *
 import session
 from middleware.authentication import *
+from middleware.resource import *
 from middleware.exception_handlers import *
 
 class API(object):
@@ -18,8 +19,9 @@ class API(object):
 	def _setup_cors(self):
 		self.cors_middleware = CORS(allow_all_origins=True, allow_all_headers=True, allow_all_methods=True)
 		self.authentication_middleware = AuthenticationMiddleware()
+		self.resource_middleware = ResourceMiddleware()
 
-		self.api = falcon.API(middleware=[self.cors_middleware.middleware, self.authentication_middleware])
+		self.api = falcon.API(middleware=[self.cors_middleware.middleware, self.authentication_middleware, self.resource_middleware])
 
 	def _setup_errors(self):
 		self.api.add_error_handler(Exception, InternalServerError)

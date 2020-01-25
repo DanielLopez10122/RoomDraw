@@ -7,9 +7,6 @@ import models.student
 
 import session
 
-from endpoints.hooks import on_request
-
-@falcon.before(on_request)
 class Student(object):
 	# without an id, return info on current student
 	def on_get(self, request, response):

@@ -5,7 +5,6 @@ import models.wishlist
 
 from utils import *
 
-@falcon.before(on_request)
 class StudentWishlist(object):
 	def on_get(self, request, response):
 		student_id = self.student_id
@@ -34,8 +33,7 @@ class StudentWishlist(object):
 			return
 
 		sql.query(models.wishlist.StudentWishlist).filter_by(rank=rank, student_id=student_id).delete()
-		wishlist = sql.query(models.wishlist.StudentWishlist).filter(models.wishlist.StudentWishlist.rank > rank)
-			.filter_by(student_id=student_id)all()
+		wishlist = sql.query(models.wishlist.StudentWishlist).filter(models.wishlist.StudentWishlist.rank > rank).filter_by(student_id=student_id).all()
 
 		for option in wishlist:
 			option.rank -= 1

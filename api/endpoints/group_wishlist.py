@@ -3,9 +3,7 @@ from private import *
 import models.wishlist
 
 from utils import *
-from endpoints.hooks import on_request
 
-@falcon.before(on_request)
 class GroupWishlist(object):
 	def on_get(self, request, response):
 		student = get_student_by_id(self.student_id)
@@ -38,8 +36,7 @@ class GroupWishlist(object):
 			return
 
 		sql.query(models.wishlist.GroupWishlist).filter_by(rank=rank, group_id=group_id).delete()
-		wishlist = sql.query(models.wishlist.GroupWishlist).filter(models.wishlist.GroupWishlist.rank > rank)
-			.filter_by(group_id=group_id)all()
+		wishlist = sql.query(models.wishlist.GroupWishlist).filter(models.wishlist.GroupWishlist.rank > rank).filter_by(group_id=group_id).all()
 
 		for option in wishlist:
 			option.rank -= 1

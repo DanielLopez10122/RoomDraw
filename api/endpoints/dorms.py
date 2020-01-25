@@ -6,9 +6,7 @@ import models.dorms
 import session
 
 from utils import *
-from endpoints.hooks import on_request
 
-@falcon.before(on_request)
 class Dorm(object):
 	# Get information on dorms
 	def on_get(self, request, response):
