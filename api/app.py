@@ -2,7 +2,7 @@
 
 import falcon
 from falcon_cors import CORS
-from endpoints import *
+import endpoints
 import session
 from middleware.authentication import *
 from middleware.resource import *
@@ -27,15 +27,15 @@ class API(object):
 		self.api.add_error_handler(Exception, InternalServerError)
 
 	def _setup_endpoints(self):
-		self.api.add_route("/group", groups.Group())
-		self.api.add_route("/group/members", groups.GroupMembers())
-		self.api.add_route("/group/invite", groups.GroupInvite())
-		self.api.add_route("/group_wishlist", group_wishlist.GroupWishlist())
-		self.api.add_route("/wishlist", student_wishlist.StudentWishlist())
-		self.api.add_route("/student", student.Student())
-		self.api.add_route("/myinfo", student.MyInfo())
-		self.api.add_route("/dorms", dorms.Dorm())
-		self.api.add_route("/rooms", rooms.Room())
+		self.api.add_route("/group", endpoints.Group())
+		self.api.add_route("/group/members", endpoints.GroupMembers())
+		self.api.add_route("/group/invite", endpoints.GroupInvite())
+		self.api.add_route("/group_wishlist", endpoints.GroupWishlist())
+		self.api.add_route("/wishlist", endpoints.StudentWishlist())
+		self.api.add_route("/student", endpoints.Student())
+		self.api.add_route("/myinfo", endpoints.MyInfo())
+		self.api.add_route("/dorms", endpoints.Dorm())
+		self.api.add_route("/rooms", endpoints.Room())
 
 api = API()
 
