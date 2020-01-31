@@ -30,10 +30,10 @@ def get_group_members(group_id, session=None):
 
 class Group(object):
 	def on_get(self, request, response):
-		stud = get_student_by_id(self.student_id)
+		sql = sql_create_session()
+		stud = get_student_by_id(self.student_id, sql)
 		gid = stud.group_id
 
-		sql = sql_create_session()
 		group = sql.query(models.Group).filter_by(group_id=gid).first()
 
 		response.media = group.dict() if group else "{}"
@@ -63,10 +63,11 @@ class Group(object):
 
 class GroupMembers(object):
 	def on_get(self, request, response):
-		stud = get_student_by_id(self.student_id)
+		sql = sql_create_session()
+
+		stud = get_student_by_id(self.student_id, sql)
 		gid = stud.group_id
 
-		sql = sql_create_session()
 		members = get_group_members(gid)
 
 		response.media = []
@@ -84,12 +85,13 @@ class GroupInvite(object):
 	# Invite a student
 	def on_post(self, request, response):
 		params = json.loads(request.stream.read())
-		stud = get_student_by_id(self.student_id)
-
 		recepient = INT(params.get("student_id"))
-		gid = stud.group_id
 
 		sql = sql_create_session()
+		stud = get_student_by_id(self.student_id, sql)
+
+		gid = stud.group_id
+
 		invitation = sql.query(models.Invitation).filter_by(student_id=recepient, group_id=gid).first()
 		if invitation is not None:
 			return
