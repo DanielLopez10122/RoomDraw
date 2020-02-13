@@ -1,21 +1,29 @@
 /* Style the top navigation bar */
-.topnav {
-	overflow: hidden;
+#topnav {
 	background-color: #333;
+	width: 100%;
+	height: 44px;
+}
+
+#profile-pic {
+	float: right;
+	height: 40px;
+	margin-top: 2px;
+	margin-right: 4px;
 }
 
 /* Style the topnav links */
-.topnav a {
+#topnav a {
 	float: left;
 	display: block;
 	color: #f2f2f2;
 	text-align: center;
-	padding: 14px 16px;
+	padding: 1%;
 	text-decoration: none;
 }
 
 /* Change color on hover */
-.topnav a:hover {
+#topnav a:hover {
 	background-color: #ddd;
 	color: black;
 }
