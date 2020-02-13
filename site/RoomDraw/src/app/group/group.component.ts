@@ -29,12 +29,8 @@ export class GroupComponent implements OnInit {
 	}
 
 	getGroupMembers(): void {
-		if (this.groupService.members == null) {
-			this.groupService.getGroupMembers()
-				.subscribe(members => this.members = members);
-		} else {
-			this.members = this.groupService.members;
-		}
+		this.groupService.getGroupMembers()
+			.subscribe(members => this.members = members);
 	}
 
 	leaveGroup(): void {
@@ -61,13 +57,8 @@ export class GroupComponent implements OnInit {
 	}
 
 	getGroupInvites(): void {
-		if (this.groupService.invites == null) {
-			this.groupService.getInvites()
-				.subscribe(invitations => this._populateInvitations(invitations));
-		} else {
-			console.log("Populating null");
-			this._populateInvitations(this.groupService.invites);
-		}
+		this.groupService.getInvites()
+			.subscribe(invitations => this._populateInvitations(invitations));
 	}
 
 	inviteToGroup(student_id): void {

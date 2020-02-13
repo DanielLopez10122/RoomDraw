@@ -3,6 +3,7 @@ import { Invitations } from './Invitations';
 import { StudentService } from './student.service';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { share } from 'rxjs/operators';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 @Injectable({
@@ -10,8 +11,9 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 })
 export class GroupService {
 
-	public members: Student[];
-	public invites: Invitations[];
+	members: Student[];
+	invites: Invitations[];
+
 	httpOptions = {
 		headers: new HttpHeaders({
 			'SESSION-ID': 'alex'
@@ -28,9 +30,13 @@ export class GroupService {
 	}
 
 	getGroupMembers(): Observable<Student[]> {
+		if (this.members != null) {
+			return of(this.members);
+		}
+
 		var url = "http://localhost:8000/group/members";
 
-		var obs = this.http.get<Student[]>(url, this.httpOptions);
+		var obs = this.http.get<Student[]>(url, this.httpOptions).pipe(share());
 		obs.subscribe(members => this.members = members);
 		return obs;
 	}
@@ -41,8 +47,14 @@ export class GroupService {
 	}
 
 	getInvites(): Observable<Invitations[]> {
+		if (this.invites != null) {
+			return of(this.invites);
+		}
+
 		var url = "http://localhost:8000/group/invite";
-		return this.http.get<Invitations[]>(url, this.httpOptions);
+		var obs = this.http.get<Invitations[]>(url, this.httpOptions).pipe(share());
+		obs.subscribe(invites => this.invites = invites);
+		return obs
 	}
 
 	inviteToGroup(student_id): Observable<Object> {

@@ -6,10 +6,11 @@ from utils import *
 
 class GroupWishlist(object):
 	def on_get(self, request, response):
-		student = get_student_by_id(self.student_id)
+		sql = sql_create_session()
+
+		student = get_student_by_id(self.student_id, sql)
 		group_id = student.group_id
 
-		sql = sql_create_session()
 		wishlist = sql.query(models.GroupWishlist).filter_by(group_id=group_id).all()
 
 		response.media = []
@@ -17,12 +18,12 @@ class GroupWishlist(object):
 			response.media.append(item.dict(exclude='group_id'))
 
 	def on_delete(self, request, response):
-		student = get_student_by_id(self.student_id)
-		sql = sql_create_session()
+		rank = INT(request.params.get("rank"))
 
+		sql = sql_create_session()
+		student = get_student_by_id(self.student_id, sql)
 		group_id = student.group_id
 
-		rank = INT(request.params.get("rank"))
 
 		sql.query(models.GroupWishlist).filter_by(rank=rank, group_id=group_id).delete()
 		wishlist = sql.query(models.GroupWishlist).filter(models.GroupWishlist.rank > rank).filter_by(group_id=group_id).all()
@@ -32,15 +33,15 @@ class GroupWishlist(object):
 		sql.commit()
 	
 	def on_put(self, request, response):
-		student = get_student_by_id(self.student_id)
-
-		group_id = student.group_id
-
 		rank = INT(request.params.get("rank"))
 		dorm_id = INT(request.params.get("dorm_id"))
 		room_id = INT(request.params.get("room_id"), nullable=True)
 		floor = INT(request.params.get("floor"), nullable=True)
 
+		sql = sql_create_session()
+		student = get_student_by_id(self.student_id, sql)
+
+		group_id = student.group_id
 		wishlist = sql.query(models.GroupWishlist).filter_by(group_id=group_id).all()
 
 		for value in wishlist:
