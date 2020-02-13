@@ -11,6 +11,7 @@ import { Component, OnInit } from '@angular/core';
 export class HomeComponent implements OnInit {
 	myInfo: Student;
 	rank: number;
+
 	constructor(
 		private studentService: StudentService,
 		private groupService: GroupService
