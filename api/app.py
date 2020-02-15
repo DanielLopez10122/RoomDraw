@@ -43,3 +43,10 @@ session.create_session(0, "alex")
 session.create_session(1, "denton")
 session.create_session(2, "eli")
 session.create_session(3, "michael")
+
+def serve(host='localhost', port=8000):
+	import waitress
+	waitress.serve(api.api, host=host, port=port, ipv6=False)
+
+if __name__ == '__main__':
+	serve()
