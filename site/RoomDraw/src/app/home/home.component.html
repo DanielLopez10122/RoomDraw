@@ -7,7 +7,8 @@
 
 	<!--Main Content-->
 	<div class="row">
-		<div class="column" style="background-color:#aaa;"><h2>Your Information</h2>
+		<div class="column" style="background-color:#aaa;" *ngIf="myInfo">
+			<h2>Your Information</h2>
 			<h3>Student: {{myInfo.first_name}} {{myInfo.last_name}}</h3>
 			<h3>Your Random Number: {{myInfo.random_number}}</h3>
 			<!--<h3>Groups Ahead of You: {{rank}}</h3>-->
