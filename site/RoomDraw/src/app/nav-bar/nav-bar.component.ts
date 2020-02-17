@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavBarComponent implements OnInit {
 
+  notifications = true;
+
   constructor() { }
 
   ngOnInit() {
