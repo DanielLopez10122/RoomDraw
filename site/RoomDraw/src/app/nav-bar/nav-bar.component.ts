@@ -1,4 +1,6 @@
+import { GroupService } from '../group.service';
 import { Component, OnInit } from '@angular/core';
+import { Invitations } from '../Invitations';
 
 @Component({
   selector: 'app-nav-bar',
@@ -7,11 +9,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavBarComponent implements OnInit {
 
-  notifications = true;
+  invitations: Invitations[];
 
-  constructor() { }
+  constructor(
+    private groupService: GroupService
+  ) { }
 
   ngOnInit() {
+    this.groupService.getInvites()
+      .subscribe(invitations => this.invitations = invitations);
   }
 
 }
