@@ -10,7 +10,7 @@ body {
 }
 
 /* Style the header */
-.header {
+#header {
 	background-color: #f1f1f1;
 	padding: 30px;
 	text-align: center;
@@ -23,6 +23,7 @@ body {
 	width: 50%;
 	padding: 10px;
 	height: 400px; /* Should be removed. Only for demonstration */
+	background-color: #bbb;
 }
 
 /* Clear floats after the columns */
@@ -30,33 +31,4 @@ body {
 	content: "";
 	display: table;
 	clear: both;
-}
-
-/*Progress Bar*/
-#myProgress {
-	width: 100%;
-	background-color: #ddd;
-}
-
-#myBar {
-	width: 10%;
-	height: 30px;
-	background-color: #4CAF50;
-	text-align: center;
-	line-height: 30px;
-	color: white;
-}
-
-/* Style the footer */
-.footer {
-	background-color: #f1f1f1;
-	padding: 10px;
-	text-align: center;
-}
-
-/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
-@media (max-width: 600px) {
-	.column {
-		width: 100%;
-	}
 }
