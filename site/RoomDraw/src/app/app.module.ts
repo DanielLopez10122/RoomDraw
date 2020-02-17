@@ -8,6 +8,8 @@ import { HomeComponent } from './home/home.component';
 import { GroupComponent } from './group/group.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { HousingComponent } from './housing/housing.component';
+import { DocumentComponent } from './document/document.component';
+import { FaqComponent } from './faq/faq.component';
 
 @NgModule({
 	declarations: [
@@ -15,7 +17,9 @@ import { HousingComponent } from './housing/housing.component';
 		HomeComponent,
 		GroupComponent,
 		NavBarComponent,
-		HousingComponent
+		HousingComponent,
+		DocumentComponent,
+		FaqComponent
 	],
 	imports: [
 		BrowserModule,
