@@ -11,6 +11,7 @@ import { Component, OnInit } from '@angular/core';
 export class HomeComponent implements OnInit {
 	myInfo: Student;
 	rank: number;
+
 	constructor(
 		private studentService: StudentService,
 		private groupService: GroupService
@@ -21,13 +22,8 @@ export class HomeComponent implements OnInit {
 	}
 
 	getMyInfo(): void {
-		if (this.studentService.myInfo == null) {
-			this.studentService.getInfo()
-				.subscribe(myInfo => this.myInfo = myInfo);
-		} else {
-			this.myInfo = this.studentService.myInfo;
-		}
-
+		this.studentService.getInfo()
+			.subscribe(myInfo => this.myInfo = myInfo);
 		this.groupService.getGroupsAhead().
 			subscribe(rank => this.rank = rank);
 	}

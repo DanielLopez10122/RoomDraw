@@ -16,11 +16,11 @@ shift $((OPTIND-1))
 GET() {
 	path="$1"
 	shift 1
-	curl -H @$HEADER_FILE ${HOST}:${PORT}/${path} $@
+	curl -L -H @$HEADER_FILE ${HOST}:${PORT}/${path} $@
 }
 
 DELETE() {
 	path="$1"
 	shift 1
-	curl -X DELETE -H @$HEADER_FILE ${HOST}:${PORT}/${path} $@
+	curl -L -X DELETE -H @$HEADER_FILE ${HOST}:${PORT}/${path} $@
 }

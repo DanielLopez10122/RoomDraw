@@ -1,68 +1,41 @@
 #!/usr/bin/python
 
 from private import *
-import models.wishlist
-import session
+import models
 
 from utils import *
 
-class StudentWishlist:
+class StudentWishlist(object):
 	def on_get(self, request, response):
-		# TODO make sure the database is up, otherwise send status code 5xx
-		session_token = get_session(request)
+		sql = sql_create_session()
+		wishlist = sql.query(models.StudentWishlist).filter_by(student_id=self.student_id).all()
 
-		student_id = session.id_from_session(session_token)
-		connection = sql.SQL()
-		results = connection.run_stored_proc_for_multiple_items(procs.get_student_wishlist, student_id)
-
-		data = []
-		for i in results:
-			w = models.wishlist.Wishlist(i)
-			data.append(w)
-		response.media = data
+		response.media = []
+		for item in wishlist:
+			response.media.append(item.dict(exclude='student_id'))
 
 	def on_delete(self, request, response):
-		# TODO make sure the database is up, otherwise send status code 5xx
-		session_token = get_session(request)
-		student_id = session.id_from_session(session_token)
+		rank = INT(request.params.get("rank"))
 
-		try:
-			rank = int(get_value(request.params, "rank"))
-		except ValueError:
-			response.media = "Invalid rank"
-			return
-		except TypeError:
-			response.media = "Missing rank"
-			return
+		sql.query(models.StudentWishlist).filter_by(rank=rank, student_id=self.student_id).delete()
+		wishlist = sql.query(models.StudentWishlist).filter(models.StudentWishlist.rank > rank).filter_by(student_id=self.student_id).all()
 
-		connection = sql.SQL()
-
-		connection.run_stored_proc(procs.delete_student_wishlist, student_id, rank)
-		connection.commit()
+		for option in wishlist:
+			option.rank -= 1
+		sql.commit()
 
 	def on_put(self, request, response):
-		# TODO make sure the database is up, otherwise send status code 5xx
-		session_token = get_session(request)
+		rank = INT(request.params.get("rank"))
+		dorm_id = INT(request.params.get("dorm_id"))
+		room_id = INT(request.params.get("room_id"), nullable=True)
+		floor = INT(request.params.get("floor"), nullable=True)
 
-		student_id = session.id_from_session(session_token)
+		wishlist = sql.query(models.StudentWishlist).filter_by(student_id=self.student_id).all()
 
-		try:
-			rank       = int(get_val(request.params, "rank"))
-			dorm_id    = int(get_val(request.params, "dorm_id"))
-			room_id    = int(get_val(request.params, "room_id"))
-			floor      = int(get_val(request.params, "floor"))
-		except ValueError:
-			response.media = "Invalid paramaters"
-			return
-		except TypeError:
-			pass
+		for value in wishlist:
+			if value.rank >= rank:
+				value.rank += 1
 
-		if not rank or not dorm_id:
-			response.media = "Missing paramaters"
-			return
-
-		connection = sql.SQL()
-
-		connection.run_stored_proc(procs.put_student_wishlist,
-				student_id, rank, dorm_id, room_id, floor)
-		connection.commit()
+		item = models.StudentWishlist(student_id=self.student_id, rank=rank, dorm_id=dorm_id, room_id=room_id, floor=floor)
+		sql.add(item)
+		sql.commit()

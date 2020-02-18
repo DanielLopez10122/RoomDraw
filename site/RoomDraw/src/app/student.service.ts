@@ -1,6 +1,7 @@
 import { Student } from './Student'
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { share } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
@@ -8,7 +9,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class StudentService {
 
-	public myInfo: Student;
+	myInfo: Student;
 
 	httpOptions = {
 		headers: new HttpHeaders({
@@ -21,8 +22,12 @@ export class StudentService {
 	) { }
 
 	getInfo(): Observable<Student> {
+		if (this.myInfo != null) {
+			return of(this.myInfo)
+		}
+
 		var url = "http://localhost:8000/myinfo";
-		var obs = this.http.get<Student>(url, this.httpOptions);
+		var obs = this.http.get<Student>(url, this.httpOptions).pipe(share());
 		obs.subscribe(myInfo => this.myInfo = myInfo);
 		return obs;
 	}
